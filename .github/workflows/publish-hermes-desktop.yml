@@ -105,7 +105,9 @@ jobs:
       - name: Apply v2026.9.24 dependency hotfix
         if: steps.source.outputs.release_exists != 'true' && steps.source.outputs.hermes_ref == 'v2026.9.24'
         working-directory: hermes-agent
-        run: npm install --workspace apps/desktop --no-save --package-lock=false lucide-react@0.577.0
+        run: |
+          npm install --no-save --package-lock=false --ignore-scripts --workspaces=false lucide-react@0.577.0
+          node -e 'console.log("Resolved hotfix dependency:", require.resolve("lucide-react", { paths: ["apps/desktop"] }))'
 
       - name: Build official Desktop app
         if: steps.source.outputs.release_exists != 'true'
