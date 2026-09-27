@@ -100,6 +100,13 @@ jobs:
         working-directory: hermes-agent
         run: npm ci --workspace apps/desktop --include-workspace-root
 
+      # v2026.9.24 imports lucide-react but omitted it from the Desktop
+      # manifest. Pin the version used by the repaired upstream manifest.
+      - name: Apply v2026.9.24 dependency hotfix
+        if: steps.source.outputs.release_exists != 'true' && steps.source.outputs.hermes_ref == 'v2026.9.24'
+        working-directory: hermes-agent
+        run: npm install --workspace apps/desktop --no-save --package-lock=false lucide-react@0.577.0
+
       - name: Build official Desktop app
         if: steps.source.outputs.release_exists != 'true'
         working-directory: hermes-agent
